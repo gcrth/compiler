@@ -10,6 +10,30 @@ enum TokenType
 	punctuator
 };
 
+enum NonTerType
+{
+	EXT_DEC_LIST,
+	EXT_DEC,
+	FUNC_DEF,
+	TYPE_SPEC,
+	ARGU_LIST,
+	ARGUMENT,
+	CODE_BLOCK,
+	SENT_LIST,
+	SENT,
+	RTN_SENT,
+	EXPR_SENT,
+	DECLARE,
+	SELECTION,
+	ITERATION,
+	EXPR,
+	ASSI_EXP,
+	ADD_EXP,
+	MULT_EXP,
+	FACTOR,
+	EXP_LIST
+};
+
 class Token
 {
 public:
@@ -34,20 +58,39 @@ public:
 
 };
 
-int loadXml(string xmlName, vector<Token>&inputBuffer,vector< TiXmlElement*>tokenList)
+class GramCat
+{
+public:
+	GramCat()
+	{
+
+	}
+	GramCat(bool isTeriminal_, int type_, int tokenIdex_)
+	{
+		isTeriminal = isTeriminal_;
+		type = type_;
+		tokenIdex = tokenIdex_;
+	}
+	bool isTeriminal;
+	int type;
+	int tokenIdex;
+	vector<GramCat>data;
+};
+
+int loadXml(string xmlName, vector<Token>&inputBuffer, vector< TiXmlElement*>tokenList)
 {
 	TiXmlDocument doc;
 	if (!doc.LoadFile(xmlName.c_str()))
 	{
 		cerr << doc.ErrorDesc() << endl;
-		return -1;
+		exit(-1);
 	}
 	TiXmlElement* root = doc.FirstChildElement();
 	if (root == NULL)
 	{
 		cerr << "Failed to load file: No root element." << endl;
 		doc.Clear();
-		return -1;
+		exit(-1);
 	}
 	root = root->NextSiblingElement()->FirstChildElement();
 	for (TiXmlElement* elem = root->FirstChildElement(); elem != NULL; elem = elem->NextSiblingElement())
@@ -118,35 +161,78 @@ int lr(string inXmlName, string outXmlName, string outXmlNameAbas)
 {
 	vector<Token>inputBuffer;
 	vector< TiXmlElement*>xmlTokenList;
-	vector<Token>anaStack;
+	vector<GramCat>anaStack;
 	vector<int>statStack;
 
 	loadXml(inXmlName, inputBuffer, xmlTokenList);
 	inputBuffer.emplace_back(0xffff, string("#"), TokenType::punctuator, 0xffff, true);
-	anaStack.emplace_back(0xffff, string("#"), TokenType::punctuator, 0xffff, true);
+	anaStack.emplace_back(true, TokenType::punctuator, inputBuffer.size() - 1);
 	statStack.push_back(0);
-	int tokenIndex=0;
+	int tokenIndex = 0;
+
+	//>>>>>>>>>>
+	vector<string>compareList = { "int","void",",","{","}","(",")","+","-","*","/","if","else","while","return",";","=","#" };
+	//>>>>>>>>>>
 	while (true)
 	{
 		Token token;
 		token = inputBuffer[tokenIndex];
-		int i, j;
-		i = statStack.back();
+		int Listi, Listj = -1;
+		Listi = statStack.back();
 		if (token.type == TokenType::identifier)
 		{
-			j = 0;
+			Listj = 0;
 		}
 		else if (token.type == TokenType::constant)
 		{
-			j = 1;
+			Listj = 1;
 		}
 		else if (token.type == TokenType::string_literal)
 		{
-			j = 2;
+			Listj = 2;
 		}
 		else
 		{
+			for (size_t i = 0; i < compareList.size(); i++)
+			{
+				if (token.value == compareList[i])
+				{
+					Listj = i + 2;
+					break;
+				}
+			}
+			if (Listj == -1)
+			{
+				cerr << "invalid token\n"
+					<< "index" << tokenIndex << endl
+					<< "line" << inputBuffer[tokenIndex].line << endl;
+				exit(1);
+			}
+		}
+		int actionValue = actionList[Listi][Listj];
+		if (actionValue / 10000 == 2)//shift
+		{
+			statStack.push_back(actionValue % 10000);
+			anaStack.emplace_back(true, token.type, tokenIndex);
+		}
+		else if (actionValue / 10000 == 1)//reduce
+		{
+			int reduceNumber = actionValue % 10000;
+			int gramType, popNum;
+			switch (reduceNumber)
+			{
+			case 0:{ }
+			}
+		}
+		else if (actionValue / 10000 == 3)//acc
+		{
 
+		}
+		else if (actionValue / 10000 == 4)//error
+		{
+			cerr << "invalid token\n"
+				<< "index" << tokenIndex << endl
+				<< "line" << inputBuffer[tokenIndex].line << endl;
 		}
 	}
 
