@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<out.xml>
+    <nonterminal type="EXT_DEC_LIST">
+        <nonterminal type="EXT_DEC">
+            <nonterminal type="FUNC_DEF">
+                <nonterminal type="TYPE_SPEC">
+                    <token>
+                        <number>1</number>
+                        <value>int</value>
+                        <type>keyword</type>
+                        <line>1</line>
+                        <valid>true</valid>
+                    </token>
+                </nonterminal>
+                <token>
+                    <number>2</number>
+                    <value>main</value>
+                    <type>identifier</type>
+                    <line>1</line>
+                    <valid>true</valid>
+                </token>
+                <token>
+                    <number>3</number>
+                    <value>(</value>
+                    <type>punctuator</type>
+                    <line>1</line>
+                    <valid>true</valid>
+                </token>
+                <token>
+                    <number>4</number>
+                    <value>)</value>
+                    <type>punctuator</type>
+                    <line>1</line>
+                    <valid>true</valid>
+                </token>
+                <nonterminal type="CODE_BLOCK">
+                    <token>
+                        <number>5</number>
+                        <value>{</value>
+                        <type>punctuator</type>
+                        <line>1</line>
+                        <valid>true</valid>
+                    </token>
+                    <nonterminal type="SENT_LIST">
+                        <nonterminal type="SENT">
+                            <nonterminal type="RTN_SENT">
+                                <token>
+                                    <number>6</number>
+                                    <value>return</value>
+                                    <type>keyword</type>
+                                    <line>2</line>
+                                    <valid>true</valid>
+                                </token>
+                                <nonterminal type="EXPR">
+                                    <nonterminal type="ASSI_EXP">
+                                        <nonterminal type="ADD_EXP">
+                                            <nonterminal type="MULT_EXP">
+                                                <nonterminal type="FACTOR">
+                                                    <token>
+                                                        <number>7</number>
+                                                        <value>0</value>
+                                                        <type>constant</type>
+                                                        <line>2</line>
+                                                        <valid>true</valid>
+                                                    </token>
+                                                </nonterminal>
+                                            </nonterminal>
+                                        </nonterminal>
+                                    </nonterminal>
+                                </nonterminal>
+                                <token>
+                                    <number>8</number>
+                                    <value>;</value>
+                                    <type>punctuator</type>
+                                    <line>2</line>
+                                    <valid>true</valid>
+                                </token>
+                            </nonterminal>
+                        </nonterminal>
+                    </nonterminal>
+                    <token>
+                        <number>9</number>
+                        <value>}</value>
+                        <type>punctuator</type>
+                        <line>3</line>
+                        <valid>true</valid>
+                    </token>
+                </nonterminal>
+            </nonterminal>
+        </nonterminal>
+    </nonterminal>
+</out.xml>
