@@ -425,7 +425,7 @@ int lr(string inXmlName, string outXmlName, string outXmlNameAbas)
 			{
 				anaStackAb.push_back(reduceListAb.back());
 			}
-			else if (gramType == 34 || gramType == 36 || gramType == 37 || gramType == 48 || gramType == 39)
+			else if (reduceNumber == 34 || reduceNumber == 36 || reduceNumber == 37 || reduceNumber == 48 || reduceNumber == 39)
 			{
 				GramCat gram(false, gramType);
 				gram.tokenIdex = reduceListAb[1].tokenIdex;
